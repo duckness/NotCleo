@@ -1,7 +1,7 @@
 # Kara
 
 These are Cogs designed to be used with [Red-DiscordBot](https://github.com/Cog-Creators/Red-DiscordBot).
-These Cogs were made primarily for use on the [King's Raid discord](https://discordapp.com/invite/kingsraid) as a replacement for both [KRBot](https://github.com/duckness/KRBot) and CleoBot. 
+These Cogs were made primarily for use on the [King's Raid discord](https://discordapp.com/invite/kingsraid) as a replacement for both [KRBot](https://github.com/duckness/KRBot) and CleoBot. This is currently a WIP, and nothing works.
 
 | Name   | Description                                                                                             |
 | ------ | ------------------------------------------------------------------------------------------------------- |
@@ -24,3 +24,4 @@ These Cogs were made primarily for use on the [King's Raid discord](https://disc
 ```
 %cog update
 ```
+## Usage
