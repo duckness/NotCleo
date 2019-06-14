@@ -1,0 +1,15 @@
+{
+    "author": [
+        "duckness"
+    ],
+    "bot_version": [
+        3,
+        0,
+        0
+    ],
+    "description": "Sends Kings Raid plug.game announcements to all servers",
+    "hidden": true,
+    "install_msg": "Get started with `%help plug` and `%help plug setchannel`",
+    "short": "Sends KR announcements",
+    "tags": []
+}
