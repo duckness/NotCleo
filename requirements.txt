@@ -1,4 +1,4 @@
-beautifulsoup4
+bs4
 parsedatetime
 pytz
 tzlocal

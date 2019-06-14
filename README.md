@@ -10,9 +10,17 @@ These Cogs were made primarily for use on the [King's Raid discord](https://disc
 
 ## Installation
 
+### Initial install
+
 ```
 %load downloader
 %repo add Kara https://github.com/duckness/Kara
+%pipinstall bs4 parsedatetime pytz tzlocal
 %cog install Kara <cogname>
 %load <cogname>
+```
+### Updating
+
+```
+%cog update
 ```
