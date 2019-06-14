@@ -25,6 +25,8 @@ class KRPlug(Cog):
             'https://www.plug.game/kingsraid/1030449/posts?menuId=9',   # Patch Note
             'https://www.plug.game/kingsraid/1030449/posts?menuId=32']  # Game Contents
 
+    full_posts = []
+
     def __init__(self, bot: Red):
         self.bot = bot
 
@@ -61,6 +63,17 @@ class KRPlug(Cog):
             await self.config.guild(ctx.guild).channelid.set(None)
             await ctx.send("Announcement channel has been cleared")
 
+    @_plug.command()
+    async def latest(self, ctx: commands.Context):
+        post_ids = await self.config.posts()
+        if not self.full_posts:
+            await check_plug()
+        post_id = str(post_ids[0])
+        if post_id in self.full_posts:
+            await ctx.send(embed=self.get_embed(self.full_posts[post_id]))
+        else:
+            await ctx.send("Error, cannot find post for some reason.")
+
     async def announce_cycle(self):
         while True:
             if self is not self.bot.get_cog("KRPlug"):
@@ -84,6 +97,21 @@ class KRPlug(Cog):
                 await channel.send(embed=embed)
 
     async def check_plug(self):
+        pages = await self.scrape_plug()
+        # process the pages into a nicer format
+        post_ids, self.full_posts = self.process_pages(pages)
+        # check for new posts
+        old_ids = await self.config.posts()
+        new_posts = []
+        if old_ids:
+            diff = list(set(post_ids) - set(old_ids))
+            for post_id in diff:
+                new_posts.append(self.full_posts[str(post_id)])
+        # save post history
+        await self.config.posts.set(list(set(old_ids + post_ids)).sort(reverse=True))
+        return new_posts
+
+    async def scrape_plug(self):
         # scrape the Plug pages
         client = aiohttp.ClientSession(loop=self.bot.loop)
         async with client as session:
@@ -92,19 +120,7 @@ class KRPlug(Cog):
                 loop=self.bot.loop,
                 return_exceptions=True
             )
-        # process the pages into a nicer format
-        post_ids, attributes = self.process_pages(pages)
-        # check for new posts
-        old_ids = await self.config.posts()
-        new_posts = []
-        if old_ids:
-            diff = list(set(post_ids) - set(old_ids))
-            for post_id in diff:
-                new_posts.append(attributes[str(post_id)])
-        # save post history
-        async with self.config.posts() as posts:
-            posts = list(set(posts + post_ids)).sort()
-        return new_posts
+        return pages
 
     async def fetch(self, session, url):
         async with async_timeout.timeout(10):
