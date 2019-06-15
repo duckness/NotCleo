@@ -1,7 +1,7 @@
-# Kara
+# NotCleo
 
 These are Cogs designed to be used with [Red-DiscordBot](https://github.com/Cog-Creators/Red-DiscordBot).
-These Cogs were made primarily for use on the [King's Raid discord](https://discordapp.com/invite/kingsraid) as a replacement for both [KRBot](https://github.com/duckness/KRBot) and CleoBot. This is currently a WIP, and nothing works.
+These Cogs were made primarily for use on the [King's Raid discord](https://discordapp.com/invite/kingsraid) as a replacement for both [KRBot](https://github.com/duckness/KRBot) and CleoBot. This is currently a WIP.
 
 | Name   | Description                                                                                             |
 | ------ | ------------------------------------------------------------------------------------------------------- |
@@ -14,9 +14,9 @@ These Cogs were made primarily for use on the [King's Raid discord](https://disc
 
 ```
 %load downloader
-%repo add Kara https://github.com/duckness/Kara
+%repo add NotCleo https://github.com/duckness/NotCleo
 %pipinstall bs4 parsedatetime pytz tzlocal
-%cog install Kara <cogname>
+%cog install NotCleo <cogname>
 %load <cogname>
 ```
 ### Updating
