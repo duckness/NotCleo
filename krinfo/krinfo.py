@@ -52,6 +52,8 @@ class KRInfo(Cog):
             stars = int(stars)
         except:
             stars = 0
+        if stars < 0 or stars > 5:
+            stars = 0
         txt = self.get_ut(hero.lower().capitalize(), stars)
         await ctx.send(txt)
 
@@ -63,6 +65,8 @@ class KRInfo(Cog):
         try:
             stars = int(stars)
         except:
+            stars = 0
+        if stars < 0 or stars > 5:
             stars = 0
         txt = self.get_uw(hero.lower().capitalize(), stars)
         await ctx.send(txt)
@@ -147,8 +151,9 @@ class KRInfo(Cog):
         return "**" + string_ + "**"
 
     def parse_vars(self, string_, vars_):
-        for i, var in enumerate(vars_):
-            string_ = string_.replace("{" + str(i) + "}", str(var))
+        if vars_ is not None:
+            for i, var in enumerate(vars_):
+                string_ = string_.replace("{" + str(i) + "}", str(var))
         return string_
 
     def get_hero(self, hero):
