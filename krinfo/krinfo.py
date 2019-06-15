@@ -22,7 +22,7 @@ class KRInfo(Cog):
     @commands.command(name="skills", aliases=["skill"])
     async def skills(self, ctx: commands.Context, hero: str):
         """
-        Shows the skills of a hero `%skill <hero>`
+        Shows the skills of a hero `%skills <hero>`
         """
         txt = self.get_skill(hero.lower().capitalize())
         await ctx.send(txt)
@@ -56,7 +56,7 @@ class KRInfo(Cog):
         await ctx.send(txt)
 
     @commands.command()
-    async def ut(self, ctx: commands.Context, hero: str, stars: str = "0"):
+    async def uw(self, ctx: commands.Context, hero: str, stars: str = "0"):
         """
         Shows the UW of a hero `%uw <hero> <stars>`, defaults to 0 star UW
         """
