@@ -13,7 +13,7 @@ Cog: Any = getattr(commands, "Cog", object)
 
 
 class KRInfo(Cog):
-    def __init__(self):
+    def __init__(self, bot: Red):
         self.bot = bot
         self.data, self.names, self.heroes = self.load_files()
         self.config = Config.get_conf(
