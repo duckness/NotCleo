@@ -8,7 +8,7 @@
         0
     ],
     "description": "Sends Kings Raid plug.game announcements to all servers",
-    "hidden": true,
+    "hidden": false,
     "install_msg": "",
     "short": "Sends KR announcements",
     "tags": []

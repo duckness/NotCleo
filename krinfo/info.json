@@ -8,7 +8,7 @@
         0
     ],
     "description": "Shows hero info",
-    "hidden": true,
+    "hidden": false,
     "install_msg": "",
     "short": "Shows hero info",
     "tags": []
