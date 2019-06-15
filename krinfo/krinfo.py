@@ -12,7 +12,7 @@ from redbot.core.bot import Red
 Cog: Any = getattr(commands, "Cog", object)
 
 
-class KRInfo():
+class KRInfo(Cog):
     def __init__(self):
         self.bot = bot
         self.data, self.names, self.heroes = self.load_files()
