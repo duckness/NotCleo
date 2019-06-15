@@ -24,24 +24,24 @@ class KRInfo(Cog):
         """
         Shows the skills of a hero `%skills <hero>`
         """
-        txt = self.get_skill(hero.lower().capitalize())
-        await ctx.send(txt)
+        emb = self.get_skill(hero.lower().capitalize())
+        await ctx.send(embed=emb)
 
     @commands.command(name="books", aliases=["book"])
     async def books(self, ctx: commands.Context, hero: str):
         """
         Shows the book upgrade on skills of a hero `%books <hero>`
         """
-        txt = self.get_books(hero.lower().capitalize())
-        await ctx.send(txt)
+        emb = self.get_books(hero.lower().capitalize())
+        await ctx.send(embed=emb)
 
     @commands.command(name="perks", aliases=["perk", "transcend"])
     async def perks(self, ctx: commands.Context, hero: str):
         """
         Shows the transcend skills of a hero `%perks <hero>`
         """
-        txt = self.get_perks(hero.lower().capitalize())
-        await ctx.send(txt)
+        emb = self.get_perks(hero.lower().capitalize())
+        await ctx.send(embed=emb)
 
     @commands.command()
     async def ut(self, ctx: commands.Context, hero: str, stars: str = "0"):
@@ -54,8 +54,8 @@ class KRInfo(Cog):
             stars = 0
         if stars < 0 or stars > 5:
             stars = 0
-        txt = self.get_ut(hero.lower().capitalize(), stars)
-        await ctx.send(txt)
+        emb = self.get_ut(hero.lower().capitalize(), stars)
+        await ctx.send(embed=emb)
 
     @commands.command()
     async def uw(self, ctx: commands.Context, hero: str, stars: str = "0"):
@@ -68,8 +68,8 @@ class KRInfo(Cog):
             stars = 0
         if stars < 0 or stars > 5:
             stars = 0
-        txt = self.get_uw(hero.lower().capitalize(), stars)
-        await ctx.send(txt)
+        emb = self.get_uw(hero.lower().capitalize(), stars)
+        await ctx.send(embed=emb)
 
     def get_skill(self, hero):
         def parse_skill(skill_vars, skill_locale, skill_num):
@@ -95,7 +95,9 @@ class KRInfo(Cog):
         for i in range(1, 5):
             s = "s" + str(i)
             skill_str += parse_skill(hero_vars[s], hero_locale[s], s)
-        return skill_str
+        title = hero_locale["name"] + ", " + hero_locale["subtitle"]
+        id_ = hero_vars["index"]
+        return self.get_embed(title, id_, skill_str)
 
     def get_books(self, hero):
         hero_vars, hero_locale = self.get_hero(hero)
@@ -109,7 +111,9 @@ class KRInfo(Cog):
                                          ["1"], hero_vars[s]["books"][1]) + "\n"
             skill_str += self.parse_vars(hero_locale[s]["books"]
                                          ["2"], hero_vars[s]["books"][2]) + "\n\n"
-        return skill_str
+        title = hero_locale["name"] + ", " + hero_locale["subtitle"]
+        id_ = hero_vars["index"]
+        return self.get_embed(title, id_, skill_str)
 
     def get_perks(self, hero):
         hero_vars, hero_locale = self.get_hero(hero)
@@ -128,14 +132,18 @@ class KRInfo(Cog):
         skill_str += self.bold("T5 Dark") + "\n"
         skill_str += self.parse_vars(hero_locale["t5"]
                                      ["dark"], hero_vars["t5"]["dark"]) + "\n"
-        return skill_str
+        title = hero_locale["name"] + ", " + hero_locale["subtitle"]
+        id_ = hero_vars["index"]
+        return self.get_embed(title, id_, skill_str)
 
     def get_uw(self, hero, stars):
         hero_vars, hero_locale = self.get_hero(hero)
         skill_str = ""
         skill_str += self.bold(hero_locale["uw"]["name"]) + "\n"
         skill_str += hero_locale["uw"]["description"][stars] + "\n"
-        return skill_str
+        title = hero_locale["name"] + ", " + hero_locale["subtitle"]
+        id_ = hero_vars["index"]
+        return self.get_embed(title, id_, skill_str)
 
     def get_ut(self, hero, stars):
         hero_vars, hero_locale = self.get_hero(hero)
@@ -145,7 +153,15 @@ class KRInfo(Cog):
             skill_str += self.bold(s.upper() + ": " +
                                    hero_locale[s]["ut"]["name"]) + "\n"
             skill_str += hero_locale[s]["ut"]["description"][stars] + "\n\n"
-        return skill_str
+        title = hero_locale["name"] + ", " + hero_locale["subtitle"]
+        id_ = hero_vars["index"]
+        return self.get_embed(title, id_, skill_str)
+
+    def get_embed(self, hero, id_, text):
+        embed = discord.Embed(title=hero,
+                              description=text,
+                              url="https://maskofgoblin.com/hero/" + str(id_))
+        return embed
 
     def bold(self, string_):
         return "**" + string_ + "**"
