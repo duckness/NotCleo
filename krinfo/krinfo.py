@@ -19,15 +19,15 @@ class KRInfo(Cog):
         self.config = Config.get_conf(
             self, identifier=107114105110102111, force_registration=True)
 
-    @commands.command()
-    async def skill(self, ctx: commands.Context, hero: str):
+    @commands.command(name="skills", aliases=["skill"])
+    async def skills(self, ctx: commands.Context, hero: str):
         """
         Shows the skills of a hero `%skill <hero>`
         """
         txt = self.get_skill(hero.lower().capitalize())
         await ctx.send(txt)
 
-    @commands.command()
+    @commands.command(name="books", aliases=["book"])
     async def books(self, ctx: commands.Context, hero: str):
         """
         Shows the book upgrade on skills of a hero `%books <hero>`
@@ -35,7 +35,7 @@ class KRInfo(Cog):
         txt = self.get_books(hero.lower().capitalize())
         await ctx.send(txt)
 
-    @commands.command()
+    @commands.command(name="perks", aliases=["perk", "transcend"])
     async def perks(self, ctx: commands.Context, hero: str):
         """
         Shows the transcend skills of a hero `%perks <hero>`
