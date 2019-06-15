@@ -9,7 +9,7 @@
     ],
     "description": "Sends Kings Raid plug.game announcements to all servers",
     "hidden": false,
-    "install_msg": "",
+    "install_msg": "`%help setannounce`, `%help lastannounce`",
     "short": "Sends KR announcements",
     "tags": []
 }

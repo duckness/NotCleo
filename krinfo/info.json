@@ -9,7 +9,7 @@
     ],
     "description": "Shows hero info",
     "hidden": false,
-    "install_msg": "",
+    "install_msg": "`%help skills`, `%help ut`, `%help uw`, `%help books`, `%help perks`",
     "short": "Shows hero info",
     "tags": []
 }
