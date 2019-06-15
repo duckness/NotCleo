@@ -37,6 +37,7 @@ class KRPlug(Cog):
         self.config.register_global(**default_global)
         self.config.register_guild(**default_guild)
 
+    @commands.command()
     @checks.mod_or_permissions(administrator=True)
     @commands.guild_only()
     async def setannounce(self, ctx: commands.Context, channel: discord.TextChannel = None):
@@ -51,6 +52,7 @@ class KRPlug(Cog):
             await self.config.guild(ctx.guild).channelid.set(None)
             await ctx.send("Announcement channel has been cleared")
 
+    @commands.command()
     @commands.guild_only()
     async def lastannounce(self, ctx: commands.Context):
         """
