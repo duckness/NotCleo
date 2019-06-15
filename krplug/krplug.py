@@ -13,8 +13,6 @@ from tzlocal import get_localzone
 import discord
 from redbot.core import Config, checks, commands
 from redbot.core.bot import Red
-from redbot.core.data_manager import cog_data_path
-from redbot.core.utils.chat_formatting import pagify, box
 
 
 Cog: Any = getattr(commands, "Cog", object)
@@ -39,22 +37,12 @@ class KRPlug(Cog):
         self.config.register_global(**default_global)
         self.config.register_guild(**default_guild)
 
-    @commands.group(name="krplug", aliases=["plug"])
     @checks.mod_or_permissions(administrator=True)
     @commands.guild_only()
-    async def _plug(self, ctx: commands.Context):
+    async def setannounce(self, ctx: commands.Context, channel: discord.TextChannel = None):
         """
-        Base command for managing KRPlug settings
-        Do `%help plug <subcommand>` for more details
-        """
-        if ctx.invoked_subcommand is None:
-            pass
-
-    @_plug.command()
-    async def setchannel(self, ctx: commands.Context, channel: discord.TextChannel = None):
-        """
-        Set the announcement channel for the server `%plug setchannel <#channel_name>`
-        Leave it blank to unset `%plug setchannel`
+        Set the announcement channel for the server `%setannounce <#channel_name>`
+        Leave it blank to unset `%setannounce`
         """
         if channel is not None:
             await self.config.guild(ctx.guild).channelid.set(channel.id)
@@ -63,11 +51,15 @@ class KRPlug(Cog):
             await self.config.guild(ctx.guild).channelid.set(None)
             await ctx.send("Announcement channel has been cleared")
 
-    @_plug.command()
-    async def latest(self, ctx: commands.Context):
+    @commands.guild_only()
+    async def lastannounce(self, ctx: commands.Context):
+        """
+        Sends the last announcement `%lastannounce`
+        """
         post_ids = await self.config.posts()
-        if not self.full_posts:
+        if not self.full_posts or not post_ids:
             await check_plug()
+            post_ids = await self.config.posts()
         post_id = str(post_ids[0])
         if post_id in self.full_posts:
             await ctx.send(embed=self.get_embed(self.full_posts[post_id]))
@@ -108,7 +100,11 @@ class KRPlug(Cog):
             for post_id in diff:
                 new_posts.append(self.full_posts[str(post_id)])
         # save post history
-        await self.config.posts.set(list(set(old_ids + post_ids)).sort(reverse=True))
+        async with self.config.posts() as posts:
+            for post in post_ids:
+                if post not in posts:
+                    posts.append(post)
+            posts.sort(reverse=True)
         return new_posts
 
     async def scrape_plug(self):
