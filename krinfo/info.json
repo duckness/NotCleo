@@ -1,0 +1,15 @@
+{
+    "author": [
+        "duckness"
+    ],
+    "bot_version": [
+        1,
+        0,
+        0
+    ],
+    "description": "Shows hero info",
+    "hidden": true,
+    "install_msg": "",
+    "short": "Shows hero info",
+    "tags": []
+}
