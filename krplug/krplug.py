@@ -58,10 +58,8 @@ class KRPlug(Cog):
         """
         Sends the last announcement `%lastannounce`
         """
+        await self.check_plug()
         post_ids = await self.config.posts()
-        if not self.full_posts or not post_ids:
-            await check_plug()
-            post_ids = await self.config.posts()
         post_id = str(post_ids[0])
         if post_id in self.full_posts:
             await ctx.send(embed=self.get_embed(self.full_posts[post_id]))
