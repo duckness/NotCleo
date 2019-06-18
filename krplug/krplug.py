@@ -86,7 +86,11 @@ class KRPlug(Cog):
                 channel = guild.get_channel(channel)
                 if channel is None:
                     continue
-                await channel.send(embed=embed)
+                # avoid permissions problems
+                try:
+                    await channel.send(embed=embed)
+                except:
+                    continue
 
     async def check_plug(self):
         pages = await self.scrape_plug()
