@@ -29,7 +29,7 @@ class KRMath(Cog):
         an expensive computation is performed.
         """
         try:
-            result = await asyncio.wait_for(self.a_parse(expr), timeout=1)
+            result = await asyncio.wait_for(self.a_parse(expr.replace("`", "")), timeout=1)
             await ctx.send(result)
         except:
             await ctx.send("Calculation error.")
