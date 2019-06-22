@@ -11,10 +11,11 @@ from redbot.core.bot import Red
 
 
 Cog: Any = getattr(commands, "Cog", object)
-parser = Parser()
 
 
 class KRMath(Cog):
+    parser = Parser()
+
     def __init__(self, bot: Red):
         self.bot = bot
 
@@ -40,4 +41,4 @@ class KRMath(Cog):
         return result
 
     def parse(self, expr):
-        return parser.parse(expr).evaluate({})
+        return self.parser.parse(expr).evaluate({})
