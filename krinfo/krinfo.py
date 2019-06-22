@@ -7,6 +7,7 @@ import re
 import discord
 from redbot.core import Config, checks, commands
 from redbot.core.bot import Red
+from fuzzywuzzy import fuzz, process
 
 
 Cog: Any = getattr(commands, "Cog", object)
@@ -24,24 +25,21 @@ class KRInfo(Cog):
         """
         Shows the skills of a hero `%skills <hero>`
         """
-        emb = self.get_skill(hero.lower().capitalize())
-        await ctx.send(embed=emb)
+        await self.reply(ctx=ctx, func=self.get_skill, hero=hero)
 
     @commands.command(name="books", aliases=["book"])
     async def books(self, ctx: commands.Context, hero: str):
         """
         Shows the book upgrade on skills of a hero `%books <hero>`
         """
-        emb = self.get_books(hero.lower().capitalize())
-        await ctx.send(embed=emb)
+        await self.reply(ctx=ctx, func=self.get_books, hero=hero)
 
     @commands.command(name="perks", aliases=["perk", "transcend"])
     async def perks(self, ctx: commands.Context, hero: str):
         """
         Shows the transcend skills of a hero `%perks <hero>`
         """
-        emb = self.get_perks(hero.lower().capitalize())
-        await ctx.send(embed=emb)
+        await self.reply(ctx=ctx, func=self.get_perks, hero=hero)
 
     @commands.command()
     async def ut(self, ctx: commands.Context, hero: str, stars: str = "0"):
@@ -54,8 +52,7 @@ class KRInfo(Cog):
             stars = 0
         if stars < 0 or stars > 5:
             stars = 0
-        emb = self.get_ut(hero.lower().capitalize(), stars)
-        await ctx.send(embed=emb)
+        await self.reply(ctx=ctx, func=self.get_ut, hero=hero, stars=stars)
 
     @commands.command()
     async def uw(self, ctx: commands.Context, hero: str, stars: str = "0"):
@@ -68,8 +65,23 @@ class KRInfo(Cog):
             stars = 0
         if stars < 0 or stars > 5:
             stars = 0
-        emb = self.get_uw(hero.lower().capitalize(), stars)
-        await ctx.send(embed=emb)
+        await self.reply(ctx=ctx, func=self.get_uw, hero=hero, stars=stars)
+
+    async def reply(self, ctx, func, hero: str, stars: int=None):
+        hero_ = hero.lower().capitalize()
+        results = self.fuzzysearch(hero_)
+        if results[1] < 50:
+            hero_ = hero
+        else:
+            hero_ = results[0]
+        if self.check_hero(hero_):
+            if type(stars) is int:
+                emb = func(hero_, stars)
+            else:
+                emb = func(hero_)
+            await ctx.send(embed=emb)
+        else:
+            await ctx.send(f"Unable to locate {hero}.")
 
     def get_skill(self, hero):
         def parse_skill(skill_vars, skill_locale, skill_num):
@@ -172,11 +184,22 @@ class KRInfo(Cog):
                 string_ = string_.replace("{" + str(i) + "}", str(var))
         return string_
 
+    def check_hero(self, hero):
+        return True if hero in self.names else False
+
     def get_hero(self, hero):
         hero_id = self.names[hero]
         hero_vars = self.data["hero"][hero_id]
         hero_locale = self.heroes[hero_id]
         return hero_vars, hero_locale
+
+    def fuzzysearch(self, hero):
+        extracted = process.extract(
+            hero, self.names.keys(), limit=1, scorer=fuzz.QRatio)
+        if extracted:
+            return extracted[0]
+        else:
+            return None
 
     def load_files(self):
         fullpath = os.path.dirname(os.path.abspath(__file__))
