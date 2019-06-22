@@ -1,0 +1,15 @@
+{
+    "author": [
+        "duckness"
+    ],
+    "bot_version": [
+        1,
+        0,
+        0
+    ],
+    "description": "Math commands for the bot",
+    "hidden": false,
+    "install_msg": "`%help calc`",
+    "short": "Math commands for the bot",
+    "tags": []
+}
