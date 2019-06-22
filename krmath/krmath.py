@@ -24,20 +24,20 @@ class KRMath(Cog):
         """
         General calculator command `%calc 1+1`, 
         see: https://github.com/Axiacore/py-expression-eval 
-        for a full list of what you can do
+        for a full list of what you can do.
+        Will result in an error if an invalid expression or
+        an expensive computation is performed.
         """
         try:
-            result = await asyncio.wait_for(a_parse(expr), timeout=1)
-            ctx.send(result)
-        except asyncio.TimeoutError:
-            print("Calculation timeout.")
+            result = await asyncio.wait_for(self.a_parse(expr), timeout=1)
+            await ctx.send(result)
         except:
-            print("Calculation error.")
+            await ctx.send("Calculation error.")
 
     async def a_parse(self, expr):
         loop = asyncio.get_running_loop()
         with concurrent.futures.ThreadPoolExecutor() as pool:
-            result = await loop.run_in_executor(pool, parse, expr)
+            result = await loop.run_in_executor(pool, self.parse, expr)
         return result
 
     def parse(self, expr):
