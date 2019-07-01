@@ -66,6 +66,19 @@ class KRPlug(Cog):
         else:
             await ctx.send("Error, cannot find post for some reason.")
 
+    @commands.command()
+    @commands.is_owner()
+    async def forceannounce(self, ctx: commands.Context):
+        """
+        Force announce the last announcement `%forceannounce`
+        """
+        post_ids = await self.config.posts()
+        post_id = str(post_ids[0])
+        if post_id in self.full_posts:
+            await self.send_announcements([self.full_posts[post_id]])
+        else:
+            await ctx.send("Error, cannot find post for some reason.")
+
     async def announce_cycle(self):
         while True:
             if self is not self.bot.get_cog("KRPlug"):
