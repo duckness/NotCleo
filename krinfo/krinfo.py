@@ -80,7 +80,7 @@ class KRInfo(Cog):
         Shows basic data of an artifact `%artifact <artifact> <stars>`, defaults to 0 star artifact
         """
         temp = artifact.rsplit(" ", 1)
-        if temp[1] and str.isdigit(temp[1]):
+        if len(temp) == 2 and str.isdigit(temp[1]):
             stars = int(temp[1])
             artifact = temp[0]
         else:
