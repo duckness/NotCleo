@@ -2,3 +2,5 @@ bs4
 parsedatetime
 pytz
 tzlocal
+py_expression_eval
+beautifultable
