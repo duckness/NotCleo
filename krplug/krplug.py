@@ -86,6 +86,7 @@ class KRPlug(Cog):
                 return
             results = await self.check_plug()
             if results:
+                print("New posts found, attempting to send...")
                 await self.send_announcements(results)
             await asyncio.sleep(60)
 
@@ -102,7 +103,8 @@ class KRPlug(Cog):
                 # avoid permissions problems
                 try:
                     await channel.send(embed=embed)
-                except:
+                except Exception as e:
+                    print(e)
                     continue
 
     async def check_plug(self):
