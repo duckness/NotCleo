@@ -232,10 +232,16 @@ class KRInfo(Cog):
             "Main Stats": {"s": "WIP", "inline": True},
             "Additional Stats": {"s": additional_str, "inline": True},
             "Hero Index": {"s": index_str, "inline": False},
-            "Story": {"s": hero_locale["story"], "inline": False}
+            "Story": {"s": self.trimlen(hero_locale["story"]), "inline": False}
         }
         id_ = hero_vars["index"]
         return self.get_embed(hero, id_, story_str, fields)
+
+    def trimlen(self, s):
+        if len(s) > 1024:
+            return s[:1021] + "..."
+        else:
+            return s
 
     def get_embed(self, hero, id_, text="", fields=None):
         embed = discord.Embed(title=hero,
