@@ -84,10 +84,11 @@ class KRPlug(Cog):
             if self is not self.bot.get_cog("KRPlug"):
                 print("Announce canceled, cog has been lost")
                 return
-            results = await self.check_plug()
-            if results:
+            new_posts, new_ids = await self.check_plug()
+            if new_posts:
                 print("New posts found, attempting to send...")
-                await self.send_announcements(results)
+                await self.send_announcements(new_posts)
+                await save_plug(new_ids)
             await asyncio.sleep(60)
 
     async def send_announcements(self, results):
@@ -118,13 +119,15 @@ class KRPlug(Cog):
             diff = list(set(post_ids) - set(old_ids))
             for post_id in diff:
                 new_posts.append(self.full_posts[str(post_id)])
-        # save post history
+        return new_posts, post_ids
+
+    # save post history
+    async def save_plug(self, new_ids):
         async with self.config.posts() as posts:
-            for post in post_ids:
-                if post not in posts:
-                    posts.append(post)
+            for new_id in new_ids:
+                if new_id not in posts:
+                    posts.append(new_id)
             posts.sort(reverse=True)
-        return new_posts
 
     async def scrape_plug(self):
         # scrape the Plug pages
