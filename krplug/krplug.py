@@ -88,13 +88,15 @@ class KRPlug(Cog):
             if new_posts:
                 print("New posts found, attempting to send...")
                 await self.send_announcements(new_posts)
-                await save_plug(new_ids)
+                await self.save_plug(new_ids)
             await asyncio.sleep(60)
 
     async def send_announcements(self, results):
+        embeds = []
         for result in results:
-            embed = self.get_embed(result)
-            for guild in self.bot.guilds:
+            embeds.append(self.get_embed(result))
+        for guild in self.bot.guilds:
+            for embed in embeds:
                 channel = await self.config.guild(guild).channelid()
                 if channel is None:
                     continue
@@ -104,9 +106,10 @@ class KRPlug(Cog):
                 # avoid permissions problems
                 try:
                     await channel.send(embed=embed)
+                except discord.errors.Forbidden as e:
+                    print("FORBIDDEN: " + e)
                 except Exception as e:
                     print(e)
-                    continue
 
     async def check_plug(self):
         pages = await self.scrape_plug()
