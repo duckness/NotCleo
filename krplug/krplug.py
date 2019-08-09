@@ -107,7 +107,7 @@ class KRPlug(Cog):
                 try:
                     await channel.send(embed=embed)
                 except discord.errors.Forbidden as e:
-                    print("FORBIDDEN: " + e)
+                    print("FORBIDDEN: " + str(e))
                 except Exception as e:
                     print(e)
 
